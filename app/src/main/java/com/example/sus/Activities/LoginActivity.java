@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sus.R;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Intent HomeActivity;
     private ImageView loginPhoto;
+    private TextView adminLink, notAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

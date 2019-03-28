@@ -7,6 +7,16 @@
     android:background="#fff"
     tools:context=".Activities.LoginActivity">
 
+    <TextView
+        android:id="@+id/notAdminLink"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:text="Login as Student?"
+        android:textColor="#000000"
+        android:textSize="13sp"
+        tools:layout_editor_absoluteX="218dp"
+        tools:layout_editor_absoluteY="474dp" />
+
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -18,71 +28,60 @@
         android:id="@+id/loginPhoto"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginTop="77dp"
-        android:layout_marginBottom="80dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/userphoto" />
+        app:srcCompat="@drawable/userphoto"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="54dp" />
 
     <EditText
         android:id="@+id/loginEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
         android:background="@drawable/reg_edittext_style"
         android:ems="10"
 
         android:hint="Email"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="201dp" />
 
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:background="@drawable/reg_edittext_style"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="@+id/loginEmail"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="264dp" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="57dp"
         android:background="@drawable/reg_btn_style"
         android:text="Login"
         android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:layout_editor_absoluteX="122dp"
+        tools:layout_editor_absoluteY="406dp" />
 
     <ProgressBar
         android:id="@+id/loginProgress"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/adminLink"
-        app:layout_constraintTop_toTopOf="@+id/loginButton" />
+        tools:layout_editor_absoluteX="170dp"
+        tools:layout_editor_absoluteY="406dp" />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
         android:text="Remember me"
         android:textColor="#000000"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/loginButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        tools:layout_editor_absoluteX="122dp"
+        tools:layout_editor_absoluteY="360dp" />
 
     <TextView
         android:id="@+id/adminLink"
@@ -91,38 +90,35 @@
         android:text="Login as Admin?"
         android:textColor="#000000"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/forgotPassword"
-        app:layout_constraintEnd_toStartOf="@+id/loginButton"
-        app:layout_constraintHorizontal_bias="0.234"
-        app:layout_constraintStart_toStartOf="@+id/loginButton"
-        app:layout_constraintTop_toTopOf="@+id/forgotPassword"
-        app:layout_constraintVertical_bias="0.0" />
+        tools:layout_editor_absoluteX="75dp"
+        tools:layout_editor_absoluteY="474dp" />
 
     <TextView
         android:id="@+id/registerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
         android:text="Register Account Here"
         android:textColor="#000000"
         android:textSize="13sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPhoto" />
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="158dp" />
 
     <TextView
         android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Forgot Password?"
         android:textColor="#000000"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/loginButton"
-        app:layout_constraintStart_toEndOf="@+id/loginButton"
-        app:layout_constraintTop_toBottomOf="@+id/loginButton"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toTopOf="@+id/checkBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
 
 </android.support.constraint.ConstraintLayout>
