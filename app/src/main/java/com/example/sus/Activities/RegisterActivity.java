@@ -41,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userEmail, userPassword, userName, userStudentNumber;
     private ProgressBar loadingProgress;
     private Button regBtn;
+    private Button reLoginBtn;
+
 
     private FirebaseAuth mAuth;
 
@@ -56,10 +58,17 @@ public class RegisterActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.regPassword);
         loadingProgress = findViewById(R.id.regProgressBar);
         regBtn = findViewById(R.id.regButton);
-
+        reLoginBtn = findViewById(R.id.reLoginBtn);
         loadingProgress.setVisibility(View.INVISIBLE);
-
         mAuth = FirebaseAuth.getInstance();
+
+        reLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+
 
     //update user photo  and name
     private void updateUserInfo(final String name, Uri pickedImgUri, final FirebaseUser currentUser) {
