@@ -1,6 +1,7 @@
 package com.example.sus.Activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.sus.Activities.Models.User_Model;
 import com.example.sus.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,6 +29,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,11 +48,15 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
+    private String photo_url = "";
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        context = this;
 
         //inu views
         userEmail = findViewById(R.id.regEmail);
@@ -92,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //everything is ok and fields are filled now and we can start creating user account
                     //CreateUserAccount method will try to create the user if the email is valid
 
-                    CreateUserAccount(email,name,studentNumber,password);
+                    CreateUserAccount(email, password);
                 }
 
             }
@@ -117,24 +124,32 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void CreateUserAccount(String email, final String name, String studentNumber, String password) {
+    private void CreateUserAccount(final String email, String password) {
 
         //this method create user account with specific email and password
-        mAuth.createUserWithEmailAndPassword(email,password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
                 if(task.isSuccessful()){
+                    User_Model model = new User_Model();
+                    model.setfull_name(((EditText) findViewById(R.id.regName)).getText().toString());
+                    model.setemail(email);
+                    model.setstudent_no(((EditText) findViewById(R.id.regStudentNumber)).getText().toString());
+                    model.setaccess_level("Student");
+                    model.setprofile_photo_url(photo_url);
 
-                    //user account created
-                    showMessage("Account Created");
-                    //after we created user account we need to update his profile picture and name
-                    updateUserInfo(name, pickedImgUri, mAuth.getCurrentUser());
+                    //Write user details
+                    FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile").setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            startActivity(new Intent(context, Home.class));
+                            //Take user to home page
+                        }
+                    });
 
                 }
                 else{
-
                     //account creation failed
                     showMessage("Account creation failed" + task.getException().getMessage());
                     regBtn.setVisibility(View.VISIBLE);
@@ -160,6 +175,7 @@ public class RegisterActivity extends AppCompatActivity {
         imageFilePath.putFile(pickedImgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                photo_url = taskSnapshot.getDownloadUrl().toString();
 
                 //image uploaded successfully
                 //now we can get our image url
