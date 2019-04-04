@@ -27,8 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Intent HomeActivity;
     private ImageView loginPhoto;
-    private TextView adminLink, notAdminLink;
-    private String parentDbName = "User";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         HomeActivity = new Intent(this,com.example.sus.Activities.Home.class);
         loginPhoto = findViewById(R.id.loginPhoto);
-        adminLink = (TextView)findViewById(R.id.adminLink);
-        notAdminLink = (TextView)findViewById(R.id.notAdminLink);
+
 
 
         loginPhoto.setOnClickListener(new View.OnClickListener() {
@@ -78,25 +76,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        adminLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnLogin.setText("Login Admin");
-                adminLink.setVisibility(View.INVISIBLE);
-                notAdminLink.setVisibility(View.VISIBLE);
-                parentDbName = "Admin";
-            }
-        });
-
-        notAdminLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnLogin.setText("Login");
-                adminLink.setVisibility(View.VISIBLE);
-                notAdminLink.setVisibility(View.INVISIBLE);
-                parentDbName = "User";
-            }
-        });
     }
 
     private void signIn(String email, String password) {

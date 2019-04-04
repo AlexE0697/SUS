@@ -1,5 +1,6 @@
 package com.example.sus.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.sus.Activities.Adapters.ArticleAdapter;
 import com.example.sus.Activities.Models.Article_Model;
 import com.example.sus.Activities.Models.User_Model;
@@ -47,12 +47,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import Fragments.ClubsFragment;
-import Fragments.ContactFragment;
-import Fragments.EventsFragment;
-import Fragments.HomeFragment;
-import Fragments.LocationFragment;
-import Fragments.LogoutFragment;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -96,29 +90,30 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot != null) {
+                if (dataSnapshot != null) {
                     current_user = dataSnapshot.getValue(User_Model.class);
 
-                    if(current_user != null) {
+                    if (current_user != null) {
                         Toast.makeText(context, "You are a " + current_user.getaccess_level(), Toast.LENGTH_SHORT).show();
                         updateNavHeader();
 
                         switch (current_user.getaccess_level()) {
                             case "Student":
                                 //Do stuff for a student here
-                                if(menu != null) {
+                                if (menu != null) {
                                     menu.findItem(R.id.action_add_article).setVisible(false);
                                 }
                                 break;
 
                             case "Admin":
                                 //Do stuff for an Admin here
-                                if(menu != null) {
+                                if (menu != null) {
                                     menu.findItem(R.id.action_add_article).setVisible(true);
                                 }
                                 break;
 
-                            default:break;
+                            default:
+                                break;
                         }
                     }
 
@@ -132,22 +127,23 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         //Get all articles
         FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("WrongViewCast")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 all_articles.clear();
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if(ds != null) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds != null) {
                         all_articles.add(ds.getValue(Article_Model.class));
                     }
                 }
 
-                if(all_articles.size() > 0) {
+                if (all_articles.size() > 0) {
                     ArticleAdapter articleAdapter = new ArticleAdapter(all_articles, context);
                     mLayoutManager = new LinearLayoutManager(context);
                     mLayoutManager.setReverseLayout(true);
                     mLayoutManager.setStackFromEnd(true);
-                    ((RecyclerView) findViewById(R.id.article_rv)).setLayoutManager(mLayoutManager);
-                    ((RecyclerView) findViewById(R.id.article_rv)).setAdapter(articleAdapter);
+                    ((RecyclerView) findViewById(R.id.article_by_tv)).setLayoutManager(mLayoutManager);
+                    ((RecyclerView) findViewById(R.id.article_by_tv)).setAdapter(articleAdapter);
                 }
             }
 
@@ -157,14 +153,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
 
 
-
-
         //Get a list of all user models
         FirebaseDatabase.getInstance().getReference().child("users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if(ds != null) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds != null) {
                         User_Model user = ds.child("profile").getValue(User_Model.class);
                         all_users.add(user);
                     }
@@ -192,7 +186,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         });
 
 
-
     }
 
     public void showNewArticleDialog() {
@@ -206,7 +199,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         new_article_dialog.show();
-
 
 
         ((ImageButton) new_article_dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
@@ -223,13 +215,13 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 model.settitle(((EditText) new_article_dialog.findViewById(R.id.title_et)).getText().toString());
                 model.setdescription(((EditText) new_article_dialog.findViewById(R.id.description_et)).getText().toString());
                 model.setarticle_by(current_user.getfull_name());
-                model.settimestamp(getTimestamp());
+                model.settimestamp(model.gettimestamp());
 
-                //Write new artcile model to Fierbase
+                //Write new article model to Firebase
                 FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").child(model.gettimestamp()).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
+                        if (task.isSuccessful()) {
                             Toast.makeText(context, "Article added successfully", Toast.LENGTH_SHORT).show();
                             new_article_dialog.dismiss();
                         } else {
@@ -284,56 +276,45 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.nav_user_profile:
                 startActivity(new Intent(context, UserProfile.class));
-              break;
-
-            case R.id.nav_location:
 
                 break;
 
+            case R.id.nav_home:
+                startActivity(new Intent(context, Home.class));
 
+                break;
 
-            default:break;
-        }
+            case R.id.nav_events:
+                startActivity(new Intent(context, EventsActivity.class));
 
+                break;
 
+            case R.id.nav_clubs:
+                startActivity(new Intent(context, ClubsActivity.class));
 
+                break;
 
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+            case R.id.nav_location:
+                startActivity(new Intent(context, LocationActivity.class));
+                break;
 
-        if (id == R.id.nav_home) {
+            case R.id.nav_contact:
+                startActivity(new Intent(context, ContactActivity.class));
 
-            getSupportActionBar().setTitle("Home");
-           getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
-        } else if (id == R.id.nav_events) {
+                break;
 
-            getSupportActionBar().setTitle("Events");
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new EventsFragment()).commit();
+            case R.id.nav_logout: {
 
-        } else if (id == R.id.nav_clubs) {
+                FirebaseAuth.getInstance().signOut();
+                Intent loginActivity = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginActivity);
+                finish();
+                break;
+            }
 
-            getSupportActionBar().setTitle("Clubs & Societies");
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ClubsFragment()).commit();
-
-        } else if (id == R.id.nav_location) {
-
-            getSupportActionBar().setTitle("Location");
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new LocationFragment()).commit();
-
-        } else if (id == R.id.nav_contact) {
-
-            getSupportActionBar().setTitle("Contact");
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new ContactFragment()).commit();
-
-        } else if (id == R.id.nav_logout) {
-
-            FirebaseAuth.getInstance().signOut();
-            Intent loginActivity = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(loginActivity);
-            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -341,7 +322,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
-    public void updateNavHeader(){
+    public void updateNavHeader() {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -353,7 +334,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         navUserName.setText(current_user.getfull_name());
 
         //Set profile photo to Nav Bar if available
-        if(current_user.getprofile_photo_url() != null && !current_user.getprofile_photo_url().equals("")) {
+        if (current_user.getprofile_photo_url() != null && !current_user.getprofile_photo_url().equals("")) {
             Picasso.with(context).load(current_user.getprofile_photo_url()).into(((ImageView) findViewById(R.id.nav_userPhoto)));
         }
 
@@ -361,10 +342,20 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
 
     public static String getTimestamp() {
-        DateFormat timestamp_format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        Date currentDate = new Date();
-        return timestamp_format.format(currentDate);
+
+        try{
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date());
+            return currentDateTime;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+
+            return null;
+        }
     }
 
-
 }
+
+
+
