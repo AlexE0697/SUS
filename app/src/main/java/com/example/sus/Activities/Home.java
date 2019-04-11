@@ -67,6 +67,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     //Layout Manager
     LinearLayoutManager mLayoutManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
