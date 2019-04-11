@@ -1,7 +1,9 @@
 package com.example.sus.Activities;
 
+import android.app.ActionBar;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.example.sus.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,7 +25,9 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
+
 
 
     /**
@@ -39,9 +43,9 @@ public class LocationActivity extends FragmentActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a marker in Dublin and move the camera
+        LatLng dublin = new LatLng(53.3487, 6.2431);
+        mMap.addMarker(new MarkerOptions().position(dublin).title("Marker in Dublin"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(dublin));
     }
 }

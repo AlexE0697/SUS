@@ -1,6 +1,5 @@
 package com.example.sus.Activities;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -75,6 +74,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //get current user
         context = this;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -94,7 +94,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     current_user = dataSnapshot.getValue(User_Model.class);
 
                     if (current_user != null) {
-                        Toast.makeText(context, "You are a " + current_user.getaccess_level(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "You are a " + current_user.getaccess_level(), Toast.LENGTH_SHORT).show();
                         updateNavHeader();
 
                         switch (current_user.getaccess_level()) {
@@ -112,8 +112,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                                 }
                                 break;
 
-                            default:
-                                break;
+                            default:break;
                         }
                     }
 
@@ -127,7 +126,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         //Get all articles
         FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").addValueEventListener(new ValueEventListener() {
-            @SuppressLint("WrongViewCast")
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 all_articles.clear();
@@ -142,13 +140,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     mLayoutManager = new LinearLayoutManager(context);
                     mLayoutManager.setReverseLayout(true);
                     mLayoutManager.setStackFromEnd(true);
-                    ((RecyclerView) findViewById(R.id.article_by_tv)).setLayoutManager(mLayoutManager);
-                    ((RecyclerView) findViewById(R.id.article_by_tv)).setAdapter(articleAdapter);
+                    ((RecyclerView) findViewById(R.id.article_rv)).setLayoutManager(mLayoutManager);
+                    ((RecyclerView) findViewById(R.id.article_rv)).setAdapter(articleAdapter);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Your permission to the database has been refused", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -215,10 +214,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 model.settitle(((EditText) new_article_dialog.findViewById(R.id.title_et)).getText().toString());
                 model.setdescription(((EditText) new_article_dialog.findViewById(R.id.description_et)).getText().toString());
                 model.setarticle_by(current_user.getfull_name());
-                model.settimestamp(model.gettimestamp());
+                model.settimestamp(getTimestamp());
 
-                //Write new article model to Firebase
-                FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").child(model.gettimestamp()).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+                //Write new article model to Fire base
+                    FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").child(model.gettimestamp()).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -245,8 +244,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else {
             finish();
             startActivity(new Intent(Home.this, Home.class));
-            Toast.makeText(context, "Page Reloaded", Toast.LENGTH_SHORT).show();
         }
+
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 
     @Override
@@ -277,10 +280,6 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_user_profile:
-                startActivity(new Intent(context, UserProfile.class));
-
-                break;
 
             case R.id.nav_home:
                 startActivity(new Intent(context, Home.class));
@@ -299,6 +298,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
             case R.id.nav_location:
                 startActivity(new Intent(context, LocationActivity.class));
+                break;
+
+            case R.id.nav_user_profile:
+                startActivity(new Intent(context, UserProfile.class));
+
                 break;
 
             case R.id.nav_contact:
@@ -340,19 +344,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
-
-    public static String getTimestamp() {
-
-        try{
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            String currentDateTime = dateFormat.format(new Date());
-            return currentDateTime;
-        }
-        catch(Exception e){
-            e.printStackTrace();
-
-            return null;
-        }
+        public static String getTimestamp() {
+            DateFormat timestamp_format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date currentDate = new Date();
+            return timestamp_format.format(currentDate);
     }
 
 }

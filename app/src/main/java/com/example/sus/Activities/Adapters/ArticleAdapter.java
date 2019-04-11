@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.example.sus.Activities.Models.Article_Model;
 import com.example.sus.R;
@@ -40,7 +40,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         holder.title.setText(article_model.gettitle());
         holder.description.setText(article_model.getdescription());
         holder.article_by.setText(article_model.getarticle_by());
-        holder.timestmap.setText(article_model.gettimestamp());
+        holder.timestamp.setText(article_model.gettimestamp());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public void onClick(View v) {
         final TextView timestamp = v.findViewById(R.id.timestamp_tv);
 
-//        Toast.makeText(context, "You clicked the " + ((TextView) v.findViewById(R.id.title_tv)).getText().toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "You clicked the " + ((TextView) v.findViewById(R.id.title_tv)).getText().toString(), Toast.LENGTH_SHORT).show();
 
         Bundle bundle = new Bundle();
         bundle.putString("timestamp", timestamp.getText().toString());
@@ -67,15 +67,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView title, description, article_by, timestmap;
+        public TextView title, description, article_by, timestamp;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(ArticleAdapter.this);
-            title = (TextView) itemView.findViewById(R.id.title_tv);
-            description = (TextView) itemView.findViewById(R.id.description_tv);
-            article_by = (TextView) itemView.findViewById(R.id.article_by_tv);
-            timestmap = (TextView) itemView.findViewById(R.id.timestamp_tv);
+            title = itemView.findViewById(R.id.title_tv);
+            description = itemView.findViewById(R.id.description_tv);
+            article_by = itemView.findViewById(R.id.article_by_tv);
+            timestamp = itemView.findViewById(R.id.timestamp_tv);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

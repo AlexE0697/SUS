@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_large"
                     android:layout_weight="1"
-                    android:textAlignment="viewEnd"
+                    android:layout_gravity="end"
                     tools:text="02-04-2019 22:41:00" />
             </LinearLayout>
         </LinearLayout>
