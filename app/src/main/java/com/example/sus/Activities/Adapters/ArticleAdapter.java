@@ -19,11 +19,11 @@ import java.util.ArrayList;
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context context;
-    private ArrayList<Article_Model> model_list;
+    private ArrayList<Article_Model> article_model_list;
     private Article_Model article_model;
 
     public ArticleAdapter(ArrayList<Article_Model> model_list, Context context) {
-        this.model_list = model_list;
+        this.article_model_list = model_list;
         this.context = context;
     }
 
@@ -35,7 +35,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        article_model = model_list.get(position);
+        article_model = article_model_list.get(position);
 
         holder.title.setText(article_model.gettitle());
         holder.description.setText(article_model.getdescription());
@@ -45,7 +45,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return model_list.size();
+        return article_model_list.size();
     }
 
     @Override
@@ -82,9 +82,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                 public boolean onLongClick(View view) {
                     view.setVisibility(View.GONE); //HACK!!
 
+                    //TODO: Show a dialog here confimring that the article will be deleted then move the below code into the onclick for the yes in the dialog
+
                     FirebaseDatabase.getInstance().getReference().child("subjects").child("articles").child(((TextView) view.findViewById(R.id.timestamp_tv)).getText().toString().trim()).removeValue();
 
-//                    Toast.makeText(context, "Delete this article. Yes or No?", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             });

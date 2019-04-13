@@ -67,6 +67,10 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     //Layout Manager
     LinearLayoutManager mLayoutManager;
 
+    //google maps related code
+    private static final String TAG = "Home";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,13 +147,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                     ((RecyclerView) findViewById(R.id.article_rv)).setLayoutManager(mLayoutManager);
                     ((RecyclerView) findViewById(R.id.article_rv)).setAdapter(articleAdapter);
                 }
+
             }
+
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(context, "Your permission to the database has been refused", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
         //Get a list of all user models
@@ -187,6 +195,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
+
+    //showing the articles
     public void showNewArticleDialog() {
         new_article_dialog = new Dialog(this);
         new_article_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -236,6 +246,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
     }
 
+
+    //pressing the back button on the phone
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -252,6 +264,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         startActivity(a);
     }
 
+    //creating the menu in action bar to create events or articles
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -260,6 +273,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    //pressing the action button that will create events and articles
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
