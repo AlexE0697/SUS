@@ -305,8 +305,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                 break;
 
-            case R.id.nav_location:
-                startActivity(new Intent(context, LocationActivity.class));
+            case R.id.nav_maps:
+                startActivity(new Intent(context, MapsActivity.class));
                 break;
 
             case R.id.nav_user_profile:
