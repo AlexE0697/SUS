@@ -41,14 +41,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Dublin and move the camera
-        LatLng NCI = new LatLng(53.3477978,-6.2449796);
-        LatLng Spire = new LatLng(53.3498091,-6.2624435);
+        LatLng NCI = new LatLng(53.349006,-6.242870);
+        LatLng Spire = new LatLng(53.349724,-6.260247);
+        LatLng Doctor = new LatLng(53.345221,-6.238665);
+        LatLng Train = new LatLng(53.351715,-6.248897);
+        LatLng Bus = new LatLng(53.349830,-6.251898);
+
         mMap.addMarker(new MarkerOptions().position(NCI).title("National College of Ireland"));
         mMap.addMarker(new MarkerOptions().position(Spire).title("Dublin City Spire"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(NCI));
+        mMap.addMarker(new MarkerOptions().position(Doctor).title("Hanover Medical"));
+        mMap.addMarker(new MarkerOptions().position(Train).title("Connolly Station"));
+        mMap.addMarker(new MarkerOptions().position(Bus).title("Bus Eirann Central Station"));
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(NCI, 18), 10000, null);
 
 
     }
+
 
 
 
