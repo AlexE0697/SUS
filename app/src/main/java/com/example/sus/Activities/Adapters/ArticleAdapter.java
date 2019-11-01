@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.example.sus.Activities.Models.Article_Model;
 import com.example.sus.R;
 import com.google.firebase.database.FirebaseDatabase;

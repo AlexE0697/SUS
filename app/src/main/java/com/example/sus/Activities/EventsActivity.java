@@ -15,9 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.sus.Activities.Adapters.EventAdapter;
@@ -28,10 +26,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -39,7 +34,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class EventsActivity extends AppCompatActivity {
+public class EventsActivity extends AppCompatActivity implements FirebaseHandler.onSingleUserProfileAcquired,
+FirebaseHandler.onAllEventsAcquired {
 
 
     static Dialog new_event_dialog;
@@ -54,85 +50,34 @@ public class EventsActivity extends AppCompatActivity {
     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
     Context context;
 
-    //Layout Manager
-    LinearLayoutManager mLayoutManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
+        initComponents();
+    }
+
+    private void initComponents() {
+        //SHOW A PROGRES DIALOD
         context = this;
 
         //add back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Get Current user
-        FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("profile").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot != null) {
-                    current_user = dataSnapshot.getValue(User_Model.class);
+        //get Current User Profile
+        FirebaseHandler.getSingleUserProfile(this, FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                    if (current_user != null) {
-                        //Toast.makeText(context, "You are a " + current_user.getaccess_level(), Toast.LENGTH_SHORT).show();
+        //Get all events
+        FirebaseHandler.getAllEvents(this);
+    }
 
-                        switch (current_user.getaccess_level()) {
-                            case "Student":
-                                //Do stuff for a student here
-                                if (menu != null) {
-                                    menu.findItem(R.id.action_add_event).setVisible(false);
-                                }
-                                break;
+    private void setupAdaptor(ArrayList<Event_Model> events) {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
 
-                            case "Admin":
-                                //Do stuff for an Admin here
-                                if (menu != null) {
-                                    menu.findItem(R.id.action_add_event).setVisible(true);
-                                }
-                                break;
-
-                            default:break;
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-
-        //Get all articles
-        FirebaseDatabase.getInstance().getReference().child("subjects").child("events").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                all_events.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    if (ds != null) {
-                        all_events.add(ds.getValue(Event_Model.class));
-                    }
-                }
-
-                if (all_events.size() > 0) {
-                    EventAdapter eventAdapter = new EventAdapter(all_events, context);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
-                    mLayoutManager.setReverseLayout(true);
-                    mLayoutManager.setStackFromEnd(true);
-
-                    ((RecyclerView) findViewById(R.id.event_rv)).setLayoutManager(mLayoutManager);
-                    ((RecyclerView) findViewById(R.id.event_rv)).setAdapter(eventAdapter);
-                }
-
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), "Your permission to the database has been refused", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        ((RecyclerView) findViewById(R.id.events_rv)).setLayoutManager(mLayoutManager);
+        ((RecyclerView) findViewById(R.id.events_rv)).setAdapter(new EventAdapter(events, context));
     }
 
     @Override
@@ -225,11 +170,13 @@ public class EventsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            finish();
-            startActivity(new Intent(EventsActivity.this, EventsActivity.class));
+        if (drawer != null) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                finish();
+                startActivity(new Intent(EventsActivity.this, EventsActivity.class));
+            }
         }
 
         Intent a = new Intent(Intent.ACTION_MAIN);
@@ -245,4 +192,37 @@ public class EventsActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onSingleUserProfileAcquired(User_Model user_model) {
+        this.current_user = user_model;
+
+        switch (current_user.getaccess_level()) {
+            case "Student":
+                //Do stuff for a student here
+                if (menu != null) {
+                    menu.findItem(R.id.action_add_event).setVisible(false);
+                }
+                break;
+
+            case "Admin":
+                //Do stuff for an Admin here
+                if (menu != null) {
+                    menu.findItem(R.id.action_add_event).setVisible(true);
+                }
+                break;
+
+            default:break;
+        }
+
+
+    }
+
+    @Override
+    public void onAllEventsAcquired(ArrayList<Event_Model> allEvents) {
+        if (allEvents.size() > 0) {
+           setupAdaptor(allEvents);
+        }
+
+
+    }
 }
