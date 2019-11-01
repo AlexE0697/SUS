@@ -25,7 +25,6 @@ import com.example.sus.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
@@ -96,6 +95,7 @@ public class EventsActivity extends AppCompatActivity implements FirebaseHandler
 
     /**
      * Only allow Admin Users see the menu to add new Events
+     *
      * @param menu
      * @return Boolean : visibility
      */
@@ -140,6 +140,7 @@ public class EventsActivity extends AppCompatActivity implements FirebaseHandler
                 model.setevent_price(((EditText) new_event_dialog.findViewById(R.id.event_price_et)).getText().toString());
                 model.setevent_by(current_user.getfull_name());
                 model.setevent_timestamp(Utils.getTimestamp());
+                model.setdeleted(false);
 
                 //Write new event model to Fire base
                 FirebaseDatabase.getInstance().getReference().child("subjects").child("events").child(model.getevent_timestamp()).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -184,10 +185,6 @@ public class EventsActivity extends AppCompatActivity implements FirebaseHandler
 
     @Override
     public void onAllEventsAcquired(ArrayList<Event_Model> allEvents) {
-        if (allEvents.size() > 0) {
-            setupAdaptor(allEvents);
-        }
-
-
+        setupAdaptor(allEvents);
     }
 }

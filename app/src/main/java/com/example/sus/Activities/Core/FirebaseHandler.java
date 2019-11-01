@@ -2,7 +2,6 @@ package com.example.sus.Activities.Core;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.example.sus.Activities.Models.Event_Model;
 import com.example.sus.Activities.Models.LocationModel;
@@ -15,6 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class FirebaseHandler {
 
@@ -67,16 +68,11 @@ public class FirebaseHandler {
         FirebaseDatabase.getInstance().getReference().child("subjects").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (!dataSnapshot.hasChild("events")) {
-                    listener[0] = (FirebaseHandler.onAllEventsAcquired) context;
-                    listener[0].onAllEventsAcquired(allEvents);
-                    return;
-                }
-
+                allEvents.clear();
                 for (DataSnapshot ds : dataSnapshot.child("events").getChildren()) {
-                    if (ds != null) {
-                        allEvents.add(ds.getValue(Event_Model.class));
+                    Event_Model event = ds.getValue(Event_Model.class);
+                    if (!event.getdeleted()) {
+                        allEvents.add(event);
                     }
                 }
                 listener[0] = (FirebaseHandler.onAllEventsAcquired) context;
@@ -93,24 +89,40 @@ public class FirebaseHandler {
     /**
      * Pass in the timestamp to delete the event
      * TODO: Handle removing the last event from the list
+     *
      * @param context
      * @param eventTimestamp
      */
-    public static void removeEvent(final Context context, String eventTimestamp) {
-        FirebaseDatabase.getInstance().getReference().child("subjects").child("events").child(eventTimestamp).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    public static void removeEvent(final Context context, final String eventTimestamp) {
 
-
+        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Are you sure?")
+                .setContentText("Won't be able to recover this event!")
+                .setConfirmText("Yes, delete it!")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(final SweetAlertDialog sDialog) {
+                        FirebaseDatabase.getInstance().getReference().child("subjects").child("events").child(eventTimestamp).child("deleted").setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    sDialog
+                                            .setTitleText("Deleted!")
+                                            .setContentText("Your event has been deleted!")
+                                            .setConfirmText("OK")
+                                            .setConfirmClickListener(null)
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                }
+                            }
+                        });
+                    }
+                })
+                .show();
     }
 
     /**
      * Get all locations
+     *
      * @param context
      */
     public static void getAllLocations(final Context context) {
@@ -137,5 +149,4 @@ public class FirebaseHandler {
 
 
     }
-
 }

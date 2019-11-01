@@ -7,6 +7,7 @@ public class Event_Model {
     private String event_timestamp;
     private String event_by;
     private String event_price;
+    private Boolean deleted;
 
     public Event_Model() {
     }
@@ -48,5 +49,13 @@ public class Event_Model {
     public void setevent_price(String event_price) {
 
         this.event_price = event_price;
+    }
+
+    public Boolean getdeleted() {
+        return deleted;
+    }
+
+    public void setdeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

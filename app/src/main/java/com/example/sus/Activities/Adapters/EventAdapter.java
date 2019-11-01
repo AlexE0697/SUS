@@ -58,14 +58,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onClick(View v) {
-        final TextView timestamp = v.findViewById(R.id.event_timestamp_tv);
-
-        //Toast.makeText(context, "You clicked the " + ((TextView) v.findViewById(R.id.title_tv)).getText().toString(), Toast.LENGTH_SHORT).show();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("timestamp", timestamp.getText().toString());
-
-        //You need to create an intent to a new Full article activity, pass in the timestamp
+//        final TextView timestamp = v.findViewById(R.id.event_timestamp_tv);
+//
+//        //Toast.makeText(context, "You clicked the " + ((TextView) v.findViewById(R.id.title_tv)).getText().toString(), Toast.LENGTH_SHORT).show();
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("timestamp", timestamp.getText().toString());
+//
+//        //You need to create an intent to a new Full article activity, pass in the timestamp
 
     }
 
