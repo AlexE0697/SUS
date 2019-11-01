@@ -58,6 +58,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onClick(View v) {
+        //TODO: When you click here, you need to be an admin and then you can edit the event
 //        final TextView timestamp = v.findViewById(R.id.event_timestamp_tv);
 //
 //        //Toast.makeText(context, "You clicked the " + ((TextView) v.findViewById(R.id.title_tv)).getText().toString(), Toast.LENGTH_SHORT).show();
