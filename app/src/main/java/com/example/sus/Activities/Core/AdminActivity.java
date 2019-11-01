@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

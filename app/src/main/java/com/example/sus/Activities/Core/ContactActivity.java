@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +19,10 @@ public class ContactActivity extends AppCompatActivity {
 
         ((Button) findViewById(R.id.contactBtn)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String sub = ((EditText)findViewById(R.id.txtSubject)).getText().toString();
-                String mess = ((EditText)findViewById(R.id.txtMessage)).getText().toString();
+                String sub = ((EditText) findViewById(R.id.txtSubject)).getText().toString();
+                String mess = ((EditText) findViewById(R.id.txtMessage)).getText().toString();
                 Intent mail = new Intent(Intent.ACTION_SEND);
-                mail.putExtra(Intent.EXTRA_EMAIL,new String[]{"alex.eyre2017@gmail.com"});
+                mail.putExtra(Intent.EXTRA_EMAIL, new String[]{"alex.eyre2017@gmail.com"});
                 mail.putExtra(Intent.EXTRA_SUBJECT, sub);
                 mail.putExtra(Intent.EXTRA_TEXT, mess);
                 mail.setType("message/rfc822");
@@ -34,13 +34,11 @@ public class ContactActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

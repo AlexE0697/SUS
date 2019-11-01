@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.sus.Activities.FirebaseHandler;
+import com.example.sus.Activities.Core.FirebaseHandler;
 import com.example.sus.Activities.Models.Event_Model;
 import com.example.sus.R;
 

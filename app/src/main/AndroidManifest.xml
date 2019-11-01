@@ -33,27 +33,27 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Activities.MapsActivity"
+            android:name=".Activities.Core.MapsActivity"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.sus.Activities.LocationActivity" />
         </activity>
-        <activity android:name=".Activities.ContactActivity" />
-        <activity android:name=".Activities.ClubsActivity" />
-        <activity android:name=".Activities.EventsActivity" />
+        <activity android:name=".Activities.Core.ContactActivity" />
+        <activity android:name=".Activities.Core.ClubsActivity" />
+        <activity android:name=".Activities.Core.EventsActivity" />
         <activity
             android:name=".Activities.LocationActivity"
             android:label="@string/title_activity_location" />
-        <activity android:name=".Activities.UserProfile" />
-        <activity android:name=".Activities.AdminActivity" />
+        <activity android:name=".Activities.Core.UserProfile" />
+        <activity android:name=".Activities.Core.AdminActivity" />
         <activity
-            android:name=".Activities.Home"
+            android:name=".Activities.Core.Home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.HomeActivity" />
-        <activity android:name=".Activities.RegisterActivity" />
-        <activity android:name=".Activities.LoginActivity">
+        <activity android:name=".Activities.Core.HomeActivity" />
+        <activity android:name=".Activities.Core.RegisterActivity" />
+        <activity android:name=".Activities.Core.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

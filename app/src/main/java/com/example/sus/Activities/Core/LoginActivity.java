@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.sus.BuildConfig;
 import com.example.sus.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -38,8 +43,33 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.loginButton);
         loginProgress = findViewById(R.id.loginProgress);
         mAuth = FirebaseAuth.getInstance();
-        HomeActivity = new Intent(this,com.example.sus.Activities.Home.class);
+        HomeActivity = new Intent(this, Home.class);
         loginPhoto = findViewById(R.id.loginPhoto);
+
+
+        //Check if app is up to date
+        FirebaseDatabase.getInstance().getReference().child("app_info").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String latestVersion = dataSnapshot.child("build").getValue(String.class);
+
+                if (null != latestVersion) {
+                    if (BuildConfig.VERSION_NAME.equals(latestVersion)) {
+                        Toast.makeText(LoginActivity.this, "Latest Version", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "You need to update", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 

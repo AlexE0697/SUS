@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -28,22 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class EventsActivity extends AppCompatActivity implements FirebaseHandler.onSingleUserProfileAcquired,
-FirebaseHandler.onAllEventsAcquired {
-
+        FirebaseHandler.onAllEventsAcquired {
 
     static Dialog new_event_dialog;
-    ArrayList<Event_Model> all_events = new ArrayList<>();
-    ArrayList<User_Model> all_users = new ArrayList<>();
-
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
 
     Menu menu;
     User_Model current_user;
@@ -104,17 +94,23 @@ FirebaseHandler.onAllEventsAcquired {
         return super.onOptionsItemSelected(item);
     }
 
-    //creating the menu in action bar to create events or articles
+    /**
+     * Only allow Admin Users see the menu to add new Events
+     * @param menu
+     * @return Boolean : visibility
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.ehome, menu);
-        return true;
+        if (current_user.getaccess_level().equalsIgnoreCase("admin")) {
+            getMenuInflater().inflate(R.menu.ehome, menu);
+            return true;
+        }
+        return false;
     }
 
-
-    //showing the events
+    /**
+     * Show a dialog to allow the user to add new Events to the database
+     */
     public void showNewEventDialog() {
         new_event_dialog = new Dialog(this);
         new_event_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -143,7 +139,7 @@ FirebaseHandler.onAllEventsAcquired {
                 model.setevent_description(((EditText) new_event_dialog.findViewById(R.id.event_description_et)).getText().toString());
                 model.setevent_price(((EditText) new_event_dialog.findViewById(R.id.event_price_et)).getText().toString());
                 model.setevent_by(current_user.getfull_name());
-                model.setevent_timestamp(getTimestamp());
+                model.setevent_timestamp(Utils.getTimestamp());
 
                 //Write new event model to Fire base
                 FirebaseDatabase.getInstance().getReference().child("subjects").child("events").child(model.getevent_timestamp()).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -158,12 +154,8 @@ FirebaseHandler.onAllEventsAcquired {
                         }
                     }
                 });
-
-
             }
         });
-
-
     }
 
     //pressing the back button on the phone
@@ -185,42 +177,15 @@ FirebaseHandler.onAllEventsAcquired {
         startActivity(a);
     }
 
-    public static String getTimestamp() {
-        DateFormat timestamp_format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
-        Date currentDate = new Date();
-        return timestamp_format.format(currentDate);
-    }
-
-
     @Override
     public void onSingleUserProfileAcquired(User_Model user_model) {
         this.current_user = user_model;
-
-        switch (current_user.getaccess_level()) {
-            case "Student":
-                //Do stuff for a student here
-                if (menu != null) {
-                    menu.findItem(R.id.action_add_event).setVisible(false);
-                }
-                break;
-
-            case "Admin":
-                //Do stuff for an Admin here
-                if (menu != null) {
-                    menu.findItem(R.id.action_add_event).setVisible(true);
-                }
-                break;
-
-            default:break;
-        }
-
-
     }
 
     @Override
     public void onAllEventsAcquired(ArrayList<Event_Model> allEvents) {
         if (allEvents.size() > 0) {
-           setupAdaptor(allEvents);
+            setupAdaptor(allEvents);
         }
 
 

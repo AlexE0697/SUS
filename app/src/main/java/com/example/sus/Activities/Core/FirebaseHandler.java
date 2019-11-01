@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

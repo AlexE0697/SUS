@@ -1,4 +1,4 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -294,6 +294,15 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.nav_add_location:
+                if (current_user.getaccess_level().equalsIgnoreCase("admin")) {
+                    //TODO : Show a map dilaog to add a new location and title
+                    Toast.makeText(context, "Feature coming soon", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "You will never be allowed to do this mother fucker", Toast.LENGTH_SHORT).show();
+                }
+                break;
 
             case R.id.nav_home:
                 startActivity(new Intent(context, Home.class));

@@ -1,13 +1,15 @@
-package com.example.sus.Activities;
+package com.example.sus.Activities.Core;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.example.sus.Activities.Models.LocationModel;
 import com.example.sus.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -24,7 +26,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         FirebaseHandler.getAllLocations(this);
     }
-
 
     /**
      * Manipulates the map once available.
@@ -44,7 +45,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions().position(new LatLng(location.getlocation_lat(), location.getlocation_lon())).title(location.gettitle()));
         }
     }
-
 
     @Override
     public void onAllLocationsAcquired(ArrayList<LocationModel> allLocations) {
